@@ -1,0 +1,65 @@
+Imports BarcodeLib.BarcodeReader
+Imports ThoughtWorks.QRCode.Codec
+Imports System.IO
+Public Class mainWinForm
+    Inherits MaterialSkin.Controls.MaterialForm
+    Private webcam As WebCam
+    Private Sub mainWinForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        webcam = New WebCam()
+        webcam.InitializeWebCam(inMotion)
+    End Sub
+    Private Sub TextBox4_KeyPress(sender As Object, e As KeyPressEventArgs)
+        Dim objQRCode As QRCodeEncoder = New QRCodeEncoder()
+        Dim imgImage As Image
+        Dim objBitmap As Bitmap
+
+        objQRCode.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE
+        objQRCode.QRCodeScale = 2
+        objQRCode.QRCodeVersion = 5
+        objQRCode.QRCodeErrorCorrect = ThoughtWorks.QRCode.Codec.QRCodeEncoder.ERROR_CORRECTION.L
+        imgImage = objQRCode.Encode("Name " + MaterialSingleLineTextField1.Text + " Aadhaar UID " + MaterialSingleLineTextField2.Text + " Pin Code " + MaterialSingleLineTextField3.Text + " Contact No " + MaterialSingleLineTextField4.Text) 'To be edited
+        objBitmap = New Bitmap(imgImage)
+        objBitmap.Save("QRCode.jpg")
+
+        picturebox1.ImageLocation = "QRCode.jpg"
+    End Sub
+
+    Private Sub MaterialFlatButton2_Click(sender As Object, e As EventArgs) Handles MaterialFlatButton2.Click
+        MaterialLabel1.Visible = True
+        My.Settings.name = MaterialSingleLineTextField1.Text
+        Dim objQRCode As QRCodeEncoder = New QRCodeEncoder()
+        Dim imgImage As Image
+        Dim objBitmap As Bitmap
+
+        objQRCode.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE
+        objQRCode.QRCodeScale = 2
+        objQRCode.QRCodeVersion = 5
+        objQRCode.QRCodeErrorCorrect = ThoughtWorks.QRCode.Codec.QRCodeEncoder.ERROR_CORRECTION.L
+        imgImage = objQRCode.Encode("Name " + MaterialSingleLineTextField1.Text + " Aadhaar UID " + MaterialSingleLineTextField2.Text + " Pin Code " + MaterialSingleLineTextField3.Text + " Address " + MaterialSingleLineTextField4.Text) 'To be edited
+        objBitmap = New Bitmap(imgImage)
+        objBitmap.Save("QRCode.jpg")
+
+        picturebox1.ImageLocation = "QRCode.jpg"
+        Verify.aadhaarQR.ImageLocation = "QRCode.jpg"
+    End Sub
+
+    Private Sub MaterialRaisedButton1_Click(sender As Object, e As EventArgs) Handles MaterialRaisedButton1.Click
+        Upload.Show()
+    End Sub
+
+    Private Sub btnStart_Click(sender As Object, e As EventArgs) Handles btnStart.Click
+        webcam.Start()
+    End Sub
+
+    Private Sub btnStop_Click(sender As Object, e As EventArgs) Handles btnStop.Click
+        webcam.Stop()
+    End Sub
+
+    Private Sub btnCapture_Click(sender As Object, e As EventArgs) Handles btnCapture.Click
+        capturedFrame.Image = inMotion.Image
+    End Sub
+
+    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+        Helper.SaveImageCapture(capturedFrame.Image)
+    End Sub
+End Class
