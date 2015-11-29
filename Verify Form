@@ -1,0 +1,43 @@
+Imports System
+Imports System.IO
+Imports System.Windows.Forms
+Imports System.Drawing
+Imports System.Drawing.Printing
+
+Public Class Verify
+    Inherits MaterialSkin.Controls.MaterialForm
+    Private WithEvents printButton As New Button
+    Private WithEvents printDocument1 As New PrintDocument
+
+    Private Sub MaterialCheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles MaterialCheckBox1.CheckedChanged
+        MaterialRaisedButton1.Enabled = True
+    End Sub
+
+    Private Sub MaterialRaisedButton1_Click(sender As Object, e As EventArgs) Handles MaterialRaisedButton1.Click
+        Dim maxHeight As Integer = 0
+        Dim maxWidth As Integer = 0
+        For Each scr As Screen In Screen.AllScreens
+            maxWidth += scr.Bounds.Width
+            If scr.Bounds.Height > maxHeight Then maxHeight = scr.Bounds.Height
+        Next
+        Dim AllScreensCapture As New Bitmap(maxWidth, maxHeight, System.Drawing.Imaging.PixelFormat.Format24bppRgb)
+        Dim screenGrab As Bitmap
+        Dim screenSize As Size
+        Dim g As Graphics
+        Dim g2 As Graphics = Graphics.FromImage(AllScreensCapture)
+        Dim a As New Point(0, 0)
+        For Each scr As Screen In Screen.AllScreens
+            screenSize = New Size(scr.Bounds.Width, scr.Bounds.Height)
+            screenGrab = New Bitmap(scr.Bounds.Width, scr.Bounds.Height)
+            g = Graphics.FromImage(screenGrab)
+            g.CopyFromScreen(a, New Point(0, 0), screenSize)
+            g2.DrawImage(screenGrab, a)
+            a.X += scr.Bounds.Width
+        Next
+        Dim Screenshot = "E:\upload.jpg"
+        If System.IO.File.Exists(Screenshot) Then
+            System.IO.File.Delete(Screenshot)
+        End If
+        AllScreensCapture.Save(Screenshot, System.Drawing.Imaging.ImageFormat.Jpeg)
+    End Sub
+End Class
