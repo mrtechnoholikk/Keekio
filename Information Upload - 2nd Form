@@ -1,0 +1,32 @@
+Imports ThoughtWorks.QRCode.Codec
+Public Class Upload
+    Inherits MaterialSkin.Controls.MaterialForm
+    Private Sub MaterialFlatButton1_Click(sender As Object, e As EventArgs) Handles MaterialFlatButton1.Click
+        Process.Start("https://ipfs.pics/")
+    End Sub
+
+    Private Sub MaterialFlatButton2_Click(sender As Object, e As EventArgs) Handles MaterialFlatButton2.Click
+        ABOUT_IPSM__THIRD_PARTY_.Show()
+    End Sub
+
+    Private Sub MaterialFlatButton4_Click(sender As Object, e As EventArgs) Handles MaterialFlatButton4.Click
+        Dim objQRCode As QRCodeEncoder = New QRCodeEncoder()
+        Dim imgImage As Image
+        Dim objBitmap As Bitmap
+
+        objQRCode.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE
+        objQRCode.QRCodeScale = 2
+        objQRCode.QRCodeVersion = 5
+        objQRCode.QRCodeErrorCorrect = ThoughtWorks.QRCode.Codec.QRCodeEncoder.ERROR_CORRECTION.L
+        imgImage = objQRCode.Encode(MaterialSingleLineTextField1.Text + " " + MaterialSingleLineTextField2.Text + " " + MaterialSingleLineTextField3.Text + " " + MaterialSingleLineTextField4.Text + " " + MaterialSingleLineTextField5.Text)
+        objBitmap = New Bitmap(imgImage)
+        objBitmap.Save("QRCode1.jpg")
+
+        PictureBox2.ImageLocation = "QRCode1.jpg"
+        Verify.documentsQR.ImageLocation = "QRCode1.jpg"
+    End Sub
+
+    Private Sub MaterialRaisedButton1_Click(sender As Object, e As EventArgs) Handles MaterialRaisedButton1.Click
+        Verify.Show()
+    End Sub
+End Class
